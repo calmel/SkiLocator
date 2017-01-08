@@ -1,5 +1,28 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
+import {StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Navigator} from 'react-native';
+
+// This is a manual function that allows replacing routes with animations
+Navigator.prototype.replaceWithAnimation = function (route) {
+  const activeLength = this.state.presentedIndex + 1;
+  const activeStack = this.state.routeStack.slice(0, activeLength);
+  const activeAnimationConfigStack = this.state.sceneConfigStack.slice(0, activeLength);
+  const nextStack = activeStack.concat([route]);
+  const destIndex = nextStack.length - 1;
+  const nextSceneConfig = this.props.configureScene(route, nextStack);
+  const nextAnimationConfigStack = activeAnimationConfigStack.concat([nextSceneConfig]);
+
+  const replacedStack = activeStack.slice(0, activeLength - 1).concat([route]);
+  this._emitWillFocus(nextStack[destIndex]);
+  this.setState({
+    routeStack: nextStack,
+    sceneConfigStack: nextAnimationConfigStack,
+  }, () => {
+    this._enableScene(destIndex);
+    this._transitionTo(destIndex, nextSceneConfig.defaultTransitionVelocity, null, () => {
+      this.immediatelyResetRouteStack(replacedStack);
+    });
+  });
+};
 
 export default class LoginForm extends Component {
     constructor(props)
@@ -17,7 +40,7 @@ export default class LoginForm extends Component {
         if(true)
         //if(this.state.username == "admin" && this.state.password == "")
         {   
-            this.props.navigator.replace({
+            this.props.navigator.replaceWithAnimation({
                 index: 2
             });
         }
