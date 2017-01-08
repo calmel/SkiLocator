@@ -39,7 +39,7 @@ export default class LoginForm extends Component {
             <TextInput style={styles.input}
             placeholder="username"
             returnKeyType="next"
-            placeholderTextColor="rgba(255,255,255,0.2)"
+            placeholderTextColor="rgba(255,255,255,0.6)"
             onSubmitEditing={ ()=> this.passwordInput.focus()}
             onChangeText={(username) => this.setState({username})}
             autoCapitalize="none"
@@ -48,7 +48,7 @@ export default class LoginForm extends Component {
             placeholder="password"
             secureTextEntry
             returnKeyType="done"
-            placeholderTextColor="rgba(255,255,255,0.2)"
+            placeholderTextColor="rgba(255,255,255,0.6)"
             ref={(input)=>this.passwordInput = input}
             onChangeText={(password) => this.setState({password})}/>  
             

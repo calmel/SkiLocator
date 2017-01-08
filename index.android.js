@@ -14,9 +14,9 @@ import
   Navigator,
 } from 'react-native';
 
-import GeolocationExample from './js/HelloWorld/HelloWorld';
+import Map from './js/Map/Map';
 import Login from './js/Login/Login'
-import Map from './js/Map/Map'
+import SampleMenu from './js/ScrollView/ScrollView'
 /*const NoBackSwipe = {
   ...Navigator.SceneConfigs.HorizontalSwipeJumpFromLeft,
   gestures: {
@@ -45,9 +45,9 @@ export default class Calvin extends Component
             case 0:
               return <Login title="Login" navigator={navigator}/>
             case 1:
-              return <GeolocationExample title="GeolocationExample" navigator={navigator}/>
-            case 2:
               return <Map title="Map" navigator={navigator}/>
+            case 2:
+              return <SampleMenu title="SampleMenu" navigator={navigator}/>
           }
         }
       }

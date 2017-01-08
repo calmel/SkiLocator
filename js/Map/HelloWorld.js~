@@ -58,11 +58,14 @@ import
   View,
 } from 'react-native';
 
+import Map from './Map/Map'
+
 export default class GeolocationExample extends Component {
   state = 
   {
     initialPosition: 'unknown',
     lastPosition: 'unknown',
+    coords: 'unknown',
   };
 
   watchID: ?number = null;
@@ -72,6 +75,7 @@ export default class GeolocationExample extends Component {
       (position) => 
       {
         var initialPosition = JSON.stringify(position);
+        console.log(initialPosition);
         this.setState({initialPosition});
       },
       (error) => alert(JSON.stringify(error)),
@@ -81,6 +85,8 @@ export default class GeolocationExample extends Component {
       (position) => 
     {
       var lastPosition = JSON.stringify(position);
+      console.log(lastPosition);
+      console.log(typeof(lastPosition));
       this.setState({lastPosition});
     });
   }
@@ -91,7 +97,7 @@ export default class GeolocationExample extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <Text>
           <Text style={styles.title}>Initial position: </Text>
           {this.state.initialPosition}
@@ -100,6 +106,7 @@ export default class GeolocationExample extends Component {
           <Text style={styles.title}>Current position: </Text>
           {this.state.lastPosition}
         </Text>
+        <Map style={styles.map} Position={this.state.lastPosition}/>
       </View>
     );
   }
