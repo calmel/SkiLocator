@@ -14,7 +14,7 @@ import {
   ListView,
   TouchableHighlight,
 } from 'react-native';
-
+import Swipeout from 'react-native-swipeout'
 
   //use this data for simple listview
   const data_array=[
@@ -201,31 +201,69 @@ export default class SampleMenu extends Component {
       filter_string:'',
     };
   }
+  deleteRow(rowId)
+  {
+    let index = data_array.indexOf(rowId);
+    if(index>-1)
+    {
+      data_array.splice(index, 1);
+    }
+    this.setState({dataSource:ds.cloneWithRows(data_array)});
+  }
+  _handleSwipeout(sectionID, rowID) {
+  for (var i = 0; i < data_array.length; i++) 
+  {
+    if (i != rowID) data_array[i].active = false
+    else data_array[i].active = true
+  }
+  this._updateDataSource(data_array)
+  }
+  _updateDataSource(data) 
+  {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(data)
+  })
+  }
+  _renderRow(rowData,sectionId,rowId)
+  {
+      let swipeBtns = [{
+      text: 'Delete',
+      backgroundColor: 'red',
+      onPress: () => { this.deleteRow(rowData) }
+    }];
+    return(
+      <Swipeout right={swipeBtns}
+                autoClose='true'
+                backgroundColor= 'transparent'>
+              <TouchableHighlight 
+              onPress={() => {
+                if(data_array[rowId] == "Me")
+                {
+                  //render map of self location
+                  this.props.navigator.push({index: 1});
+                }
+                  /* this is sample to show alert when you click on item
+                  Alert.alert(
+                    'Enter title here..',
+                    'You click on '+rowData,
+                  );
+                  */
+              }}>
+                <View style={styles.row}>
+                  <Text style={styles.row_style}>{rowData}</Text>
+                </View>
+              </TouchableHighlight>
+            </Swipeout>
+    );
+
+  }
   render() {
+
     return (
       <View style={styles.Container}>
         <ListView style={styles.listview_style}
           dataSource={this.state.dataSource}
-          renderRow={(rowData,sectionId,rowId) =>(
-            <TouchableHighlight 
-            onPress={() => {
-              if(rowId == 0)
-              {
-                //render map of self location
-                this.props.navigator.push({index: 1});
-              }
-                /* this is sample to show alert when you click on item
-                Alert.alert(
-                  'Enter title here..',
-                  'You click on '+rowData,
-                );
-                */
-            }}>
-              <View style={styles.row}>
-                <Text style={styles.row_style}>{rowData}</Text>
-              </View>
-            </TouchableHighlight>
-          )}
+          renderRow={(rowData,sectionId,rowId) => this._renderRow(rowData, sectionId, rowId)}
           enableEmptySections={true}
           renderSeparator={(sectionId, rowId) => <View key={sectionId+rowId} style={styles.separator_style} />}
           renderHeader={() =>

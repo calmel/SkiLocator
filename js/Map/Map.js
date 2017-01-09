@@ -131,7 +131,7 @@ export default class Map extends Component {
     {
       return(
       <View style={styles.Loading}>
-              <ActivityIndicator
+        <ActivityIndicator
         animating={this.state.animating}
         style={[styles.centering, {height: 80}]}
         size="large"
