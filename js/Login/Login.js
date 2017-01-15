@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor: '#34495e',
+        flexDirection: 'column',
     },
     logoContainer:{
         alignItems: 'center',
@@ -33,7 +34,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     formContainer:{
-
+        flex:1,
+        justifyContent: 'flex-end'
     },
     logo: {
         width:100,

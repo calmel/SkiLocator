@@ -80,7 +80,8 @@ export default class Map extends Component {
       console.log('we got new position')
       console.log(position)
       var lastPosition = JSON.stringify(position);
-      const newRegion = {
+      const newRegion = 
+      {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         latitudeDelta: LATITUDE_DELTA,

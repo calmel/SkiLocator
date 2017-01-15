@@ -17,12 +17,7 @@ import
 import Map from './js/Map/Map';
 import Login from './js/Login/Login'
 import SampleMenu from './js/ScrollView/ScrollView'
-/*const NoBackSwipe = {
-  ...Navigator.SceneConfigs.HorizontalSwipeJumpFromLeft,
-  gestures: {
-    pop: {}
-  }
-};*/
+//import Session from './js/Session/Session'
 
 export default class Calvin extends Component 
 {

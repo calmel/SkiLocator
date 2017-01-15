@@ -1,5 +1,6 @@
+
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Navigator} from 'react-native';
+import {StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Navigator, AsyncStorage} from 'react-native';
 
 // This is a manual function that allows replacing routes with animations
 Navigator.prototype.replaceWithAnimation = function (route) {
@@ -24,6 +25,15 @@ Navigator.prototype.replaceWithAnimation = function (route) {
   });
 };
 
+//declaring server address
+const APIRoot = "https://skilocator.herokuapp.com/";
+
+//declaring specific endpoints
+const APIEndpoints= {
+    LOGIN:          APIRoot + "/v1/login",
+    SIGNUP:         APIRoot + "/v1/users",
+};
+
 export default class LoginForm extends Component {
     constructor(props)
     {
@@ -31,15 +41,32 @@ export default class LoginForm extends Component {
         this.state=
         {
             username: '',
-            password: ''
+            password: '',
+            isLoggedIn : false,
         };
     }
-    Submit= () =>
+    storetoken = async (access_token) =>
+    {
+        try 
+        {
+            await AsyncStorage.setItem('access_token', access_token);
+        } 
+        catch (error) 
+        {
+            // Error saving data
+            console.log(error);
+        }
+    }
+    SubmitLogin= () =>
     {
         //User authentication happens here
-        if(true)
+        let access_token = this.Authenticate();
+        console.log('Json returned is');
+        console.log(access_token);
+        if(access_token)
         //if(this.state.username == "admin" && this.state.password == "")
         {   
+            this.setState({isLoggedIn: true});
             this.props.navigator.replaceWithAnimation({
                 index: 2
             });
@@ -55,6 +82,77 @@ export default class LoginForm extends Component {
             )
             this.setState({username: '', password: '',});
         }
+    }
+   SubmitSignUp = () => {
+        //create User
+        console.log('signup')
+        return fetch(APIEndpoints.SIGNUP, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user: { 
+                    username: this.state.username,
+                    email: this.state.username,
+                    password: this.state.password,
+                    password_confirmation: this.state.password,
+                },
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => 
+        {
+            //onSuccess
+            console.log('onsuccess')
+            console.log('json is ')
+            console.log(responseJson)
+            if(!responseJson.error)
+                return Alert.alert(
+                    'User Created Successfully!',
+                    'Username: '+ this.state.username,
+                    [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')}
+                    ]
+                );
+            else
+                alert(responseJson.error);
+
+        })
+        .catch((error) => 
+        {
+            //onFailure
+            console.error(error);
+            alert(error);
+        });
+
+    }
+    Authenticate = () => 
+    {
+        //authenticate
+        return fetch(APIEndpoints.LOGIN, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                    email: this.state.username,
+                    password: this.state.password,
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => 
+        {
+            //onSuccess
+            return responseJson.access_token;
+        })
+        .catch((error) => 
+        {
+            //onFailure
+            console.error(error);
+            alert(error);
+        });
+
     }
     render(){
         return (
@@ -74,18 +172,26 @@ export default class LoginForm extends Component {
             placeholderTextColor="rgba(255,255,255,0.6)"
             ref={(input)=>this.passwordInput = input}
             onChangeText={(password) => this.setState({password})}/>  
-            
-            <TouchableOpacity style={styles.buttonContainer}
-            onPress={this.Submit.bind(this)}>
-            <Text style={styles.buttonText}>LOGIN</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonBar}>
+                <TouchableOpacity style={styles.buttonLogin}
+                onPress={this.SubmitLogin.bind(this)}>
+                <Text style={styles.loginText}>LOGIN</Text>
+                </TouchableOpacity>
+                 <TouchableOpacity style={styles.buttonSignup}
+                onPress={this.SubmitSignUp.bind(this)}>
+                <Text style={styles.signupText}>SIGN UP</Text>
+                </TouchableOpacity>
+            </View>
           </View>
         );
     }
 } 
 const styles = StyleSheet.create({
     container: {
-        padding: 20
+        flex:1,
+        flexDirection: 'column',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
     },
     input: {
         height: 40,
@@ -94,15 +200,37 @@ const styles = StyleSheet.create({
         color: '#fff',
         paddingHorizontal: 10
     },
-    buttonContainer: {
+    buttonLogin: {
+        flex: 1,
         backgroundColor: '#34495e',
-        paddingVertical: 15
+        paddingVertical: 15,
+        justifyContent: 'flex-start',
+        paddingHorizontal: 10,
     },
-    buttonText: {
-        textAlign: 'center',
+    buttonSignup: {
+        flex: 1,
+        backgroundColor: '#34495e',
+        paddingVertical: 15,
+        justifyContent: 'flex-end',
+        paddingHorizontal: 10,
+    },
+    loginText: {
+        flex: 1,
         color: '#fff',
-        fontWeight: '700'
+        fontWeight: '700',
+        paddingHorizontal: 30,
+        justifyContent: 'flex-start'
+    },
+    signupText: {
+        flex: 1,
+        color: '#fff',
+        fontWeight: '700',
+        justifyContent: 'flex-end',
+        paddingHorizontal: 30,
+    },
+    buttonBar: {
+        flex: 1,
+        flexDirection: 'row',
     }
-
 });
 
