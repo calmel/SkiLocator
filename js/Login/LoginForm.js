@@ -121,7 +121,8 @@ export default class LoginForm extends Component {
    SubmitSignUp = () => {
         //create User
         console.log('signup')
-        fetch(APIEndpoints.SIGNUP, {
+        this.setState({isLoading: true});
+        return fetch(APIEndpoints.SIGNUP, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -143,7 +144,7 @@ export default class LoginForm extends Component {
             console.log('json is ')
             console.log(responseJson)
             if(!responseJson.error)
-                return Alert.alert(
+                Alert.alert(
                     'User Created Successfully!',
                     'Username: '+ this.state.username,
                     [
@@ -151,7 +152,13 @@ export default class LoginForm extends Component {
                     ]
                 );
             else
-                alert(responseJson.error);
+                Alert.alert(
+                    'Oops!',
+                    responseJson.error,
+                    [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')}
+                    ]
+                );
 
         })
         .catch((error) => 
@@ -159,7 +166,9 @@ export default class LoginForm extends Component {
             //onFailure
             console.error(error);
             alert(error);
-        });
+        })
+        .then(this.setState({isLoading: false}));
+        
 
     }
 
