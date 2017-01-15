@@ -106,6 +106,7 @@ export default class LoginForm extends Component {
             }
             else
             {
+                this.setState({username: "", password: "", isLoading: false});
                 Alert.alert(
                     'Incorrect Username/Password',
                     'Please try again',
@@ -113,7 +114,6 @@ export default class LoginForm extends Component {
                         {text: 'OK', onPress: () => console.log('OK Pressed')}
                     ]
                 )
-                this.setState({username: "", password: "", isLoading: false});
             }
         });
         
