@@ -17,7 +17,6 @@ import
 import Map from './js/Map/Map';
 import Login from './js/Login/Login'
 import SampleMenu from './js/ScrollView/ScrollView'
-//import Session from './js/Session/Session'
 
 export default class Calvin extends Component 
 {
@@ -46,18 +45,6 @@ export default class Calvin extends Component
           }
         }
       }
-     /* configurescene=
-      {
-        (route) =>
-        {
-            switch(route.index)
-            {
-              case 0:
-              case 1:
-              return NoBackSwipe
-            }
-        }
-      }*/
       />
     );
   }

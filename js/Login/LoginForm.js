@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Navigator, AsyncStorage} from 'react-native';
+import {StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Navigator, AsyncStorage, ActivityIndicator} from 'react-native';
 
 // This is a manual function that allows replacing routes with animations
 Navigator.prototype.replaceWithAnimation = function (route) {
@@ -42,7 +42,7 @@ export default class LoginForm extends Component {
         {
             username: '',
             password: '',
-            isLoggedIn : false,
+            isLoading : false,
         };
     }
     storetoken = async (access_token) =>
@@ -60,33 +60,68 @@ export default class LoginForm extends Component {
     SubmitLogin= () =>
     {
         //User authentication happens here
-        let access_token = this.Authenticate();
-        console.log('Json returned is');
-        console.log(access_token);
-        if(access_token)
-        //if(this.state.username == "admin" && this.state.password == "")
-        {   
-            this.setState({isLoggedIn: true});
-            this.props.navigator.replaceWithAnimation({
-                index: 2
-            });
-        }
-        else
+        this.setState({isLoading: true});
+        let json;
+        fetch(APIEndpoints.LOGIN, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                    email: this.state.username,
+                    password: this.state.password,
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => 
         {
-            Alert.alert(
-                'Incorrect Username/Password',
-                'Please try again',
-                [
-                    {text: 'OK', onPress: () => console.log('OK Pressed')}
-                ]
-            )
-            this.setState({username: '', password: '',});
-        }
+            //onSuccess
+            console.log('onsucess');
+            if(!responseJson.error)
+            {
+                console.log('json returned is');
+                console.log(responseJson);
+                json=[true, responseJson.access_token];
+            }
+            else
+            {
+                json=[false, responseJson.error];
+            }
+        })
+        .catch((error) => 
+        {
+            //onFailure
+            console.error(error);
+            alert(error);
+        })
+        .then(this.setState({isLoading: true}))
+        .then(()=>
+        {
+            if(json[0])
+            {   
+                this.setState({isLoggedIn: true});
+                this.props.navigator.replaceWithAnimation({
+                    index: 2
+                });
+            }
+            else
+            {
+                Alert.alert(
+                    'Incorrect Username/Password',
+                    'Please try again',
+                    [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')}
+                    ]
+                )
+                this.setState({username: "", password: "", isLoading: false});
+            }
+        });
+        
     }
    SubmitSignUp = () => {
         //create User
         console.log('signup')
-        return fetch(APIEndpoints.SIGNUP, {
+        fetch(APIEndpoints.SIGNUP, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -127,65 +162,50 @@ export default class LoginForm extends Component {
         });
 
     }
-    Authenticate = () => 
-    {
-        //authenticate
-        return fetch(APIEndpoints.LOGIN, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                    email: this.state.username,
-                    password: this.state.password,
-            })
-        })
-        .then((response) => response.json())
-        .then((responseJson) => 
-        {
-            //onSuccess
-            return responseJson.access_token;
-        })
-        .catch((error) => 
-        {
-            //onFailure
-            console.error(error);
-            alert(error);
-        });
 
-    }
-    render(){
-        return (
-          <View style = {styles.container}>
-            <TextInput style={styles.input}
-            placeholder="username"
-            returnKeyType="next"
-            placeholderTextColor="rgba(255,255,255,0.6)"
-            onSubmitEditing={ ()=> this.passwordInput.focus()}
-            onChangeText={(username) => this.setState({username})}
-            autoCapitalize="none"
-            autoCorrect={false}/>  
-            <TextInput style={styles.input}
-            placeholder="password"
-            secureTextEntry
-            returnKeyType="done"
-            placeholderTextColor="rgba(255,255,255,0.6)"
-            ref={(input)=>this.passwordInput = input}
-            onChangeText={(password) => this.setState({password})}/>  
-            <View style={styles.buttonBar}>
-                <TouchableOpacity style={styles.buttonLogin}
-                onPress={this.SubmitLogin.bind(this)}>
-                <Text style={styles.loginText}>LOGIN</Text>
-                </TouchableOpacity>
-                 <TouchableOpacity style={styles.buttonSignup}
-                onPress={this.SubmitSignUp.bind(this)}>
-                <Text style={styles.signupText}>SIGN UP</Text>
-                </TouchableOpacity>
+   render(){
+        console.log('rendering')
+        if(this.state.isLoading)
+            return(
+                <View style={styles.Loading}>
+                    <ActivityIndicator
+                    style={[styles.centering, {height: 80}]}
+                    size="large"
+                />
+                    <Text style={styles.centering}>Loading...</Text>
+                </View>)
+        else
+            return (
+            <View style = {styles.container}>
+                <TextInput style={styles.input}
+                placeholder="email"
+                returnKeyType="next"
+                placeholderTextColor="rgba(255,255,255,0.6)"
+                onSubmitEditing={ ()=> this.passwordInput.focus()}
+                onChangeText={(username) => this.setState({username})}
+                autoCapitalize="none"
+                autoCorrect={false}/>  
+                <TextInput style={styles.input}
+                placeholder="password"
+                secureTextEntry
+                returnKeyType="done"
+                placeholderTextColor="rgba(255,255,255,0.6)"
+                ref={(input)=>this.passwordInput = input}
+                onChangeText={(password) => this.setState({password})}/>  
+                <View style={styles.buttonBar}>
+                    <TouchableOpacity style={styles.buttonLogin}
+                    onPress={this.SubmitLogin.bind(this)}>
+                    <Text style={styles.loginText}>LOGIN</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonSignup}
+                    onPress={this.SubmitSignUp.bind(this)}>
+                    <Text style={styles.signupText}>SIGN UP</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-          </View>
-        );
-    }
-} 
+            );
+        }
+    } 
 const styles = StyleSheet.create({
     container: {
         flex:1,
@@ -231,6 +251,17 @@ const styles = StyleSheet.create({
     buttonBar: {
         flex: 1,
         flexDirection: 'row',
-    }
+    },
+    Loading: {
+    flex: 1,
+    backgroundColor: '#34495e',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+    centering: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
+  },
 });
 
