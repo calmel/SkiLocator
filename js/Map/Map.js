@@ -144,10 +144,9 @@ export default class Map extends Component {
   
       return (
         <View style={styles.container}>
-          <Text>
-            <Text style={styles.title}>Current position: </Text>
+            <Text style={styles.title}>Current position: 
             {JSON.stringify(this.state.coordinate)}
-          </Text>
+            </Text>
           <MapView.Animated
           ref={"map"}
           style={styles.map}
@@ -168,8 +167,10 @@ export default class Map extends Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
+    paddingTop: 20,
+    backgroundColor: '#34495e',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
   },
   Loading: {
     flex: 1,
@@ -178,10 +179,12 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
+    flex: 1,
     fontWeight: '500',
+    color: '#fff'
   },
     map:{
-     flex: 1,
+     flex: 15,
   },
 bubble: {
     backgroundColor: 'rgba(255,255,255,0.7)',

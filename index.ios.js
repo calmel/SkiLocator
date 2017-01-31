@@ -5,49 +5,48 @@
  */
 
 import React, { Component } from 'react';
-import {
+import 
+{
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Navigator,
 } from 'react-native';
 
-export default class Calvin extends Component {
-  render() {
+import Map from './js/Map/Map';
+import Login from './js/Login/Login'
+import SampleMenu from './js/ScrollView/ScrollView'
+
+export default class Calvin extends Component 
+{
+  render() 
+  {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <Navigator
+      initialRoute= 
+      {{
+        title: 'Login',
+        index: 0
+      }}
+      renderScene=
+      {
+        (route, navigator) => 
+        {
+          switch(route.index)
+          {
+            //all routing paths goes here..
+            case 0:
+              return <Login title="Login" navigator={navigator}/>
+            case 1:
+              return <Map title="Map" navigator={navigator}/>
+            case 2:
+              return <SampleMenu title="SampleMenu" navigator={navigator}/>
+          }
+        }
+      }
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
-
 AppRegistry.registerComponent('Calvin', () => Calvin);

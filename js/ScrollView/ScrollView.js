@@ -340,6 +340,7 @@ const styles = StyleSheet.create({
   },
   listview_style: {
     padding: 10,
+    paddingTop: 20,
     backgroundColor: '#34495e',
   },
   row: {

@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.2)',
         marginBottom: 20,
         color: '#fff',
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
     },
     buttonLogin: {
         flex: 1,
