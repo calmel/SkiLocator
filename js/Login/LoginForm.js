@@ -25,6 +25,8 @@ Navigator.prototype.replaceWithAnimation = function (route) {
   });
 };
 
+const ACCESS_TOKEN = 'access_token';
+
 //declaring server address
 const APIRoot = "https://skilocator.herokuapp.com/";
 
@@ -49,12 +51,24 @@ export default class LoginForm extends Component {
     {
         try 
         {
+            console.log(access_token);
             await AsyncStorage.setItem('access_token', access_token);
         } 
         catch (error) 
         {
             // Error saving data
             console.log(error);
+        }
+    }
+    checkStatus = (response) => 
+    {
+        if (response.status >= 200 && response.status < 300) 
+        {
+            return response.json();
+        } 
+        else 
+        {
+            return null;
         }
     }
     SubmitLogin= () =>
@@ -72,34 +86,14 @@ export default class LoginForm extends Component {
                     password: this.state.password,
             })
         })
-        .then((response) => response.json())
+        .then((response) => this.checkStatus(response))
         .then((responseJson) => 
         {
-            //onSuccess
-            console.log('onsucess');
-            if(!responseJson.error)
-            {
-                console.log('json returned is');
-                console.log(responseJson);
-                json=[true, responseJson.access_token];
-            }
-            else
-            {
-                json=[false, responseJson.error];
-            }
-        })
-        .catch((error) => 
-        {
-            //onFailure
-            console.error(error);
-            alert(error);
-        })
-        .then(this.setState({isLoading: true}))
-        .then(()=>
-        {
-            if(json[0])
+            if(responseJson)
             {   
+                //onSuccess
                 this.setState({isLoggedIn: true});
+                this.storetoken(responseJson.access_token);
                 this.props.navigator.replaceWithAnimation({
                     index: 2
                 });
@@ -115,7 +109,14 @@ export default class LoginForm extends Component {
                     ]
                 )
             }
+        })
+        .catch((error) => 
+        {
+            //onFailure
+            console.error(error);
+            alert(error);
         });
+        //.then(this.setState({isLoading: true}))
         
     }
    SubmitSignUp = () => {

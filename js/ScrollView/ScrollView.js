@@ -13,6 +13,7 @@ import {
   View,
   ListView,
   TouchableHighlight,
+  AsyncStorage,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout'
 
@@ -187,7 +188,7 @@ import Swipeout from 'react-native-swipeout'
     sectionHeaderHasChanged: (s1, s2) => s1 !== s2
   });
 
-
+  const ACCESS_TOKEN = 'access_token';
 
 export default class SampleMenu extends Component {
   constructor(props) {
@@ -201,6 +202,31 @@ export default class SampleMenu extends Component {
       filter_string:'',
     };
   }
+  componentWillMount() {
+    this.getToken();
+  }
+  getToken = async () => 
+    {
+        try 
+        {
+            let accessToken = await AsyncStorage.getItem(ACCESS_TOKEN);
+            if(!accessToken) 
+            {
+                console.log("Token not set");
+            } 
+            else 
+            {
+                //this.verifyToken(accessToken)
+                console.log("getting token from storage");
+                console.log(accessToken);
+                return(accessToken);
+            }
+        } 
+        catch(error) 
+        {
+            console.log("Something went wrong");
+        }
+    } 
   deleteRow(rowId)
   {
     let index = data_array.indexOf(rowId);
