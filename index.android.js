@@ -17,6 +17,7 @@ import
 import Map from './js/Map/Map';
 import Login from './js/Login/Login'
 import SampleMenu from './js/ScrollView/ScrollView'
+import EncourageSomeone from './js/ScrollView/EncourageSomeone'
 
 export default class Calvin extends Component 
 {
@@ -42,6 +43,8 @@ export default class Calvin extends Component
               return <Map title="Map" navigator={navigator}/>
             case 2:
               return <SampleMenu title="SampleMenu" navigator={navigator}/>
+            case 3:
+              return <EncourageSomeone title="SampleMenu" navigator={navigator}/>
           }
         }
       }

@@ -32,7 +32,7 @@ export default class LoginForm extends Component {
 
     SubmitLogin = () => {
         this.props.navigator.push({
-            index: 2
+            index: 3
         });
     }
 
