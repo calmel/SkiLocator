@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
   Container3: {
     flex: 0.25,
     flexDirection: 'column',
-    paddingHorizontal: 15,
+    paddingHorizontal: 5
   },
   Container4: {
     marginTop: 10,

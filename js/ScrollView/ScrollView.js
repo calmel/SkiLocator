@@ -143,7 +143,6 @@ export default class SampleMenu extends Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
@@ -158,7 +157,7 @@ const styles = StyleSheet.create({
   Container3: {
     flex: 2,
     flexDirection: 'column',
-    paddingHorizontal: 15,
+    paddingHorizontal: 5
   },
   title: {
     flex: 1,
