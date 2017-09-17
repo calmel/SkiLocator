@@ -19,9 +19,6 @@ import {
 import {Button, Icon, Text} from 'react-native-elements'
 import Emoji  from 'react-native-emoji';
 // This is a manual function that allows replacing routes with animations
-
-
-
 Navigator.prototype.replaceWithAnimation = function (route) {
     const activeLength = this.state.presentedIndex + 1;
     const activeStack = this.state.routeStack.slice(0, activeLength);
@@ -91,7 +88,8 @@ const styles = StyleSheet.create({
   Container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginTop: 20
   },
   message: {
     fontSize:20,

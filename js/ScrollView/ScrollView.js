@@ -11,13 +11,35 @@ import {
   TextInput,
   View,
   ListView,
-  TouchableHighlight,
   TouchableOpacity,
   AsyncStorage,
+  Navigator,
+  TouchableWithoutFeedback
 } from 'react-native';
 import {Button, Icon, Text} from 'react-native-elements'
 import Emoji  from 'react-native-emoji';
+// This is a manual function that allows replacing routes with animations
+Navigator.prototype.replaceWithAnimation = function (route) {
+  const activeLength = this.state.presentedIndex + 1;
+  const activeStack = this.state.routeStack.slice(0, activeLength);
+  const activeAnimationConfigStack = this.state.sceneConfigStack.slice(0, activeLength);
+  const nextStack = activeStack.concat([route]);
+  const destIndex = nextStack.length - 1;
+  const nextSceneConfig = this.props.configureScene(route, nextStack);
+  const nextAnimationConfigStack = activeAnimationConfigStack.concat([nextSceneConfig]);
 
+  const replacedStack = activeStack.slice(0, activeLength - 1).concat([route]);
+  this._emitWillFocus(nextStack[destIndex]);
+  this.setState({
+    routeStack: nextStack,
+    sceneConfigStack: nextAnimationConfigStack,
+  }, () => {
+    this._enableScene(destIndex);
+    this._transitionTo(destIndex, nextSceneConfig.defaultTransitionVelocity, null, () => {
+      this.immediatelyResetRouteStack(replacedStack);
+    });
+  });
+};
 
 export default class beEncouraged extends Component {
   constructor(props) {
@@ -66,7 +88,7 @@ export default class beEncouraged extends Component {
       'Message Received',
       'You got a new message!',
       [
-        {text: 'OK', onPress: () => this.props.navigator.push({
+        {text: 'OK', onPress: () => this.props.navigator.replaceWithAnimation({
           index: 4
         })},
       ],
@@ -97,9 +119,6 @@ export default class beEncouraged extends Component {
 
       <Text style={styles.submit}>Please choose the Emoji that best describes your mental state:</Text>
       </View>
-        <View style={styles.title}>
-        
-          </View>
         <View style={styles.Container2}>
         <TouchableOpacity style={styles.emoji}
           onPress={this.pressOne.bind(this)}>
@@ -126,6 +145,9 @@ export default class beEncouraged extends Component {
           <Text style={styles.signupText}><Emoji name="sob"/></Text>
         </TouchableOpacity>
         </View>
+        <View style={{flex: 0.4}}>
+          <Text style={styles.submit}>Happiness Metric: {this.state.happiness}</Text>
+        </View>
         <View style={styles.Container3}>
         <TextInput
         underlineColorAndroid='transparent'
@@ -134,7 +156,8 @@ export default class beEncouraged extends Component {
         multiline={true}
         placeholder="How are you feeling? Describe your situation"
         placeholderTextColor="#9d9d9d"
-        value={this.state.text}/>
+        value={this.state.text}
+        blurOnSubmit={true}/>
         </View>
         <View style={styles.Container4}>
           <Button

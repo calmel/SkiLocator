@@ -18,7 +18,8 @@ import Map from './js/Map/Map';
 import Login from './js/Login/Login';
 import BeEncouraged from './js/ScrollView/ScrollView';
 import EncourageSomeone from './js/ScrollView/EncourageSomeone';
-import ReceivedText from './js/ScrollView/receivedText'
+import ReceivedText from './js/ScrollView/receivedText';
+import PositiveVibes from './js/ScrollView/positiveVibes';
 
 export default class Calvin extends Component 
 {
@@ -47,7 +48,9 @@ export default class Calvin extends Component
             case 3:
               return <EncourageSomeone title="SampleMenu" navigator={navigator}/>
             case 4:
-            return <ReceivedText title="Receiving" navigator={navigator}/>
+              return <ReceivedText title="Receiving" navigator={navigator}/>
+            case 5:
+              return <PositiveVibes title="Vibe" navigator={navigator}/>
           }
         }
       }

@@ -19,6 +19,7 @@ import Login from './js/Login/Login'
 import BeEncouraged from './js/ScrollView/ScrollView'
 import EncourageSomeone from './js/ScrollView/EncourageSomeone'
 import ReceivedText from './js/ScrollView/receivedText'
+import PositiveVibes from './js/ScrollView/positiveVibes';
 
 export default class Calvin extends Component 
 {
@@ -48,6 +49,8 @@ export default class Calvin extends Component
               return <EncourageSomeone title="SampleMenu" navigator={navigator}/>
             case 4:
             return <ReceivedText title="Receiving" navigator={navigator}/>
+            case 5:
+              return <PositiveVibes title="Vibes" navigator={navigator}/>
           }
         }
       }

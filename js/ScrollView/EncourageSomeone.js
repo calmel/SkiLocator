@@ -15,6 +15,8 @@ import {
   TouchableOpacity,
   Navigator,
   AsyncStorage,
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
 import {Button, Icon, Text} from 'react-native-elements'
 
@@ -101,7 +103,7 @@ export default class EncourageSomeone extends Component {
   submit = () => {
     if(!this.state.submitted){
       this.setState({submitted: true})
-      setTimeout(()=>this.alert(), 3000);
+      setTimeout(()=>this.alert(), 200);
     }
   }
   getRandomInt() {
@@ -110,6 +112,7 @@ export default class EncourageSomeone extends Component {
   render() {
     return (
       <View style={styles.Container}>
+       
       <View style={styles.ContainerHeader}>
         <Icon
         size={32}
@@ -130,7 +133,8 @@ export default class EncourageSomeone extends Component {
           multiline={true}
           placeholder="Enter your message here"
           placeholderTextColor="#9d9d9d"
-          value={this.state.text}/>
+          value={this.state.text}
+          blurOnSubmit={true}/>
         </View>
         <View style={styles.Container4}>
           <Button
@@ -143,7 +147,6 @@ export default class EncourageSomeone extends Component {
           onPress={this.submit.bind(this)}
           />
         </View>
-
       </View>
     );
   }

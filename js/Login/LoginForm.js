@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, TextInput, TouchableOpacity, Alert, Navigator, AsyncStorage, ActivityIndicator} from 'react-native';
 import {Button, Icon, Text} from 'react-native-elements';
+import {Keyboard} from 'react-native'
+import Emoji  from 'react-native-emoji';
 
 // This is a manual function that allows replacing routes with animations
 Navigator.prototype.replaceWithAnimation = function (route) {
@@ -44,6 +46,12 @@ export default class LoginForm extends Component {
         });
     }
 
+    vibes = () => {
+        this.props.navigator.push({
+            index: 5
+            });
+    }
+
    render() {
             return (
             <View style = {styles.container}>
@@ -54,7 +62,7 @@ export default class LoginForm extends Component {
                       name='chat'
                       color='#ffffff'
                     />
-                    <Text style={styles.mainText} h1>Heading 1</Text>
+                    <Text style={styles.mainText} h1>Smile<Emoji name="grin"/></Text>
                 </View>
 
 
@@ -78,6 +86,17 @@ export default class LoginForm extends Component {
                     backgroundColor="#377df6"
                     onPress={this.SubmitSignUp.bind(this)}
                     title="I want to be encouraged"
+                    />
+                </View>
+                <View style={styles.buttonBar}>
+                    <Button
+                    borderRadius={5}
+                    fontWeight="bold"
+                    fontSize={20}
+                    large={true}
+                    backgroundColor="#377df6"
+                    onPress={this.vibes.bind(this)}
+                    title="Positive Vibes"
                     />
                 </View>
             </View>
