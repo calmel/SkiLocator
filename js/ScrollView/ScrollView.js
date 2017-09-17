@@ -102,7 +102,7 @@ export default class SampleMenu extends Component {
       ],
       { cancelable: false }
     );
-    his.props.navigator.push({
+    this.props.navigator.push({
       index: 2
   });
 
