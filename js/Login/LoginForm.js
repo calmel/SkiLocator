@@ -31,12 +31,14 @@ export default class LoginForm extends Component {
     }
 
     SubmitLogin = () => {
+        //encourage someone
         this.props.navigator.push({
             index: 3
         });
     }
 
    SubmitSignUp = () => {
+       //be encouraged
         this.props.navigator.push({
         index: 2
         });

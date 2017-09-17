@@ -11,15 +11,37 @@ import {
   TextInput,
   View,
   ListView,
+  Navigator,
   TouchableHighlight,
   TouchableOpacity,
   AsyncStorage,
 } from 'react-native';
 import {Button, Icon, Text} from 'react-native-elements'
 import Emoji  from 'react-native-emoji';
+// This is a manual function that allows replacing routes with animations
+Navigator.prototype.replaceWithAnimation = function (route) {
+    const activeLength = this.state.presentedIndex + 1;
+    const activeStack = this.state.routeStack.slice(0, activeLength);
+    const activeAnimationConfigStack = this.state.sceneConfigStack.slice(0, activeLength);
+    const nextStack = activeStack.concat([route]);
+    const destIndex = nextStack.length - 1;
+    const nextSceneConfig = this.props.configureScene(route, nextStack);
+    const nextAnimationConfigStack = activeAnimationConfigStack.concat([nextSceneConfig]);
+  
+    const replacedStack = activeStack.slice(0, activeLength - 1).concat([route]);
+    this._emitWillFocus(nextStack[destIndex]);
+    this.setState({
+      routeStack: nextStack,
+      sceneConfigStack: nextAnimationConfigStack,
+    }, () => {
+      this._enableScene(destIndex);
+      this._transitionTo(destIndex, nextSceneConfig.defaultTransitionVelocity, null, () => {
+        this.immediatelyResetRouteStack(replacedStack);
+      });
+    });
+  };
 
-
-export default class beEncouraged extends Component {
+export default class Receiving extends Component {
   constructor(props) {
     super(props);
     //definition of listview datasource
@@ -31,7 +53,8 @@ export default class beEncouraged extends Component {
       //filter_string:'',
       happiness:0,
       text:"",
-      submitted: false
+      submitted: false,
+      message:""
     };
   }
   componentWillMount() {
@@ -64,11 +87,11 @@ export default class beEncouraged extends Component {
   alert = () => {
     Alert.alert(
       'Message Received',
-      'You got a new message!',
+      'My Alert Msg',
       [
-        {text: 'OK', onPress: () => this.props.navigator.push({
-          index: 4
-        })},
+        {text: 'OK', onPress: () => this.props.navigator.replaceWithAnimation({
+          index: 0
+      })},
       ],
       { cancelable: false }
     );
@@ -79,52 +102,18 @@ export default class beEncouraged extends Component {
   submit = () => {
     if(!this.state.submitted){
       this.setState({submitted: true})
-      setTimeout(()=>this.alert(), 3000);
+      this.alert()
       }
   }
   render() {
 
     return (
       <View style={styles.Container}>
-      <View style={styles.ContainerHeader}>
-        <Icon
-        size={32}
-        name='chat'
-        color='#00b764'
-        containerStyle={{position: "absolute", left:5}}
-      />
-      <Text style={styles.header}>Get an encouraging message</Text>
-
-      <Text style={styles.submit}>Please choose the Emoji that best describes your mental state:</Text>
-      </View>
         <View style={styles.title}>
-        
+        <Text style={styles.submit}>Please choose the Emoji that best describes your mental state:</Text>
           </View>
         <View style={styles.Container2}>
-        <TouchableOpacity style={styles.emoji}
-          onPress={this.pressOne.bind(this)}>
-          <Text style={styles.signupText}><Emoji name="grin"/></Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.emoji}
-          onPress={this.pressTwo.bind(this)}>
-          <Text style={styles.signupText}><Emoji name="smile"/></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.emoji}
-          onPress={this.pressThree.bind(this)}>
-          <Text style={styles.signupText}><Emoji name="relaxed"/></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.emoji}
-          onPress={this.pressFour.bind(this)}>
-          <Text style={styles.signupText}><Emoji name="disappointed"/></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.emoji}
-          onPress={this.pressFive.bind(this)}>
-          <Text style={styles.signupText}><Emoji name="cry"/></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.emoji}
-          onPress={this.pressSix.bind(this)}>
-          <Text style={styles.signupText}><Emoji name="sob"/></Text>
-        </TouchableOpacity>
+          <Text style={styles.signupText}>{this.state.message}</Text>
         </View>
         <View style={styles.Container3}>
         <TextInput
@@ -132,20 +121,22 @@ export default class beEncouraged extends Component {
         style={{color: '#9d9d9d', marginTop: 5, fontSize: 18, backgroundColor: "#e6e7ea", height:200}}
         onChangeText={(text) => this.setState({text})}
         multiline={true}
-        placeholder="How are you feeling? Describe your situation"
+        placeholder="Enter your message here"
         placeholderTextColor="#9d9d9d"
         value={this.state.text}/>
         </View>
         <View style={styles.Container4}>
+        <TouchableOpacity
+        onPress={this.submit.bind(this)}>
           <Button
           borderRadius={5}
           large={true}
           fontWeight="bold"
           fontSize={20}
           backgroundColor="#377df6"
-          title="Submit"
-          onPress={this.submit.bind(this)}
+          title="OK"
           />
+      </TouchableOpacity>
         </View>
 
       </View>
@@ -153,17 +144,6 @@ export default class beEncouraged extends Component {
   }
 }
 const styles = StyleSheet.create({
-  ContainerHeader: {
-    flex: 0.7,
-    marginTop: 20
-
-  },
-  header: {
-    color: "black",
-    marginLeft: 40,
-    fontSize: 21,
-
-  },
   Container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -172,14 +152,19 @@ const styles = StyleSheet.create({
   Container2: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-
+    flexDirection: 'row'
   },
   Container3: {
     flex: 2,
     flexDirection: 'column',
-    paddingHorizontal: 5,
-
+    paddingHorizontal: 5
+  },
+  title: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexGrow: 1,
+    justifyContent: 'center'
   },
   Container4: {
     marginTop: 10,
@@ -202,13 +187,7 @@ buttonSubmit: {
   justifyContent: 'flex-end',
 },
 submit: {
-  marginTop: 20,
-  marginLeft: 5,
-  fontSize: 18,
   color: 'black',
   justifyContent: 'flex-end',
-},
-buttonSubmit: {
-  marginTop: 30
-},
+}
 });

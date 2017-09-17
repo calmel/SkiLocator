@@ -13,21 +13,33 @@ import {
   ListView,
   TouchableHighlight,
   TouchableOpacity,
+  Navigator,
   AsyncStorage,
 } from 'react-native';
 import {Button, Icon, Text} from 'react-native-elements'
 
+// This is a manual function that allows replacing routes with animations
+Navigator.prototype.replaceWithAnimation = function (route) {
+  const activeLength = this.state.presentedIndex + 1;
+  const activeStack = this.state.routeStack.slice(0, activeLength);
+  const activeAnimationConfigStack = this.state.sceneConfigStack.slice(0, activeLength);
+  const nextStack = activeStack.concat([route]);
+  const destIndex = nextStack.length - 1;
+  const nextSceneConfig = this.props.configureScene(route, nextStack);
+  const nextAnimationConfigStack = activeAnimationConfigStack.concat([nextSceneConfig]);
 
-
-  const ds = new ListView.DataSource({
-    rowHasChanged: (r1, r2) => r1 !== r2,
-    sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+  const replacedStack = activeStack.slice(0, activeLength - 1).concat([route]);
+  this._emitWillFocus(nextStack[destIndex]);
+  this.setState({
+    routeStack: nextStack,
+    sceneConfigStack: nextAnimationConfigStack,
+  }, () => {
+    this._enableScene(destIndex);
+    this._transitionTo(destIndex, nextSceneConfig.defaultTransitionVelocity, null, () => {
+      this.immediatelyResetRouteStack(replacedStack);
+    });
   });
-
-
-
-  const ACCESS_TOKEN = 'access_token';
-
+};
     const messages = [
   "Hello1",
   "Hello2",
@@ -78,14 +90,12 @@ export default class EncourageSomeone extends Component {
       'Message Sent!',
       'The person will get your message very soon! :)',
       [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {text: 'OK', onPress: () => this.props.navigator.replaceWithAnimation({
+          index: 0  
+        })},
       ],
       { cancelable: false }
     );
-    this.props.navigator.push({
-      index: 2  
-  });
-
   }
 
   submit = () => {
@@ -123,17 +133,15 @@ export default class EncourageSomeone extends Component {
           value={this.state.text}/>
         </View>
         <View style={styles.Container4}>
-          <TouchableOpacity
-            onPress={this.submit.bind(this)}>
-              <Button
-              borderRadius={5}
-              large={true}
-              fontWeight="bold"
-              fontSize={20}
-              backgroundColor="#377df6"
-              title="Submit"
-              />
-          </TouchableOpacity>
+          <Button
+          borderRadius={5}
+          large={true}
+          fontWeight="bold"
+          fontSize={20}
+          backgroundColor="#377df6"
+          title="Submit"
+          onPress={this.submit.bind(this)}
+          />
         </View>
 
       </View>
@@ -183,50 +191,6 @@ const styles = StyleSheet.create({
     flexGrow:1,
     justifyContent: 'center'
   },
-  sectionHeader: {
-    backgroundColor: '#48D1CC'
-  },
-  sectionHeaderText: {
-    fontFamily: 'AvenirNext-Medium',
-    fontSize: 16,
-    color: 'white',
-    paddingLeft: 10
-  },
-  listview_header: {
-    padding: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#C1C1C1',
-  },
-  listview_style: {
-    padding: 10,
-    paddingTop: 20,
-    backgroundColor: '#34495e',
-  },
-  row: {
-    flexDirection: 'row',
-    backgroundColor: '#34495e',
-  },
-  row_style: {
-    flex: 1,
-    fontSize: 15,
-    textAlign: 'left',
-    margin: 10,
-    color: '#fff'
-  },
-  separator_style: {
-   flex: 1,
-   height: StyleSheet.hairlineWidth,
-   backgroundColor: '#fff',
-  },
-  input: {
-    height: 40,
-    flex: 1,
-    paddingHorizontal: 8,
-    fontSize: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 2,
-  },
   loginText: {
     color: '#fff',
     fontWeight: '700',
@@ -238,5 +202,8 @@ signupText: {
     fontWeight: '700',
     justifyContent: 'flex-end',
     paddingHorizontal: 30,
+},
+buttonSubmit: {
+  marginTop: 30
 },
 });

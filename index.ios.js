@@ -15,9 +15,10 @@ import
 } from 'react-native';
 
 import Map from './js/Map/Map';
-import Login from './js/Login/Login'
-import SampleMenu from './js/ScrollView/ScrollView'
-import EncourageSomeone from './js/ScrollView/EncourageSomeone'
+import Login from './js/Login/Login';
+import BeEncouraged from './js/ScrollView/ScrollView';
+import EncourageSomeone from './js/ScrollView/EncourageSomeone';
+import ReceivedText from './js/ScrollView/receivedText'
 
 export default class Calvin extends Component 
 {
@@ -42,9 +43,11 @@ export default class Calvin extends Component
             case 1:
               return <Map title="Map" navigator={navigator}/>
             case 2:
-              return <SampleMenu title="SampleMenu" navigator={navigator}/>
+              return <BeEncouraged title="SampleMenu" navigator={navigator}/>
             case 3:
               return <EncourageSomeone title="SampleMenu" navigator={navigator}/>
+            case 4:
+            return <ReceivedText title="Receiving" navigator={navigator}/>
           }
         }
       }
