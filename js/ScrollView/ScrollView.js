@@ -252,59 +252,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent:'flex-end'
   },
-  buttonBar: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  sectionHeader: {
-    backgroundColor: '#48D1CC'
-  },
-  sectionHeaderText: {
-    fontFamily: 'AvenirNext-Medium',
-    fontSize: 16,
-    color: 'white',
-    paddingLeft: 10
-  },
-  listview_header: {
-    padding: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#C1C1C1',
-  },
-  listview_style: {
-    padding: 10,
-    paddingTop: 20,
-    backgroundColor: '#34495e',
-  },
-  row: {
-    flexDirection: 'row',
-    backgroundColor: '#34495e',
-  },
-  row_style: {
-    flex: 1,
-    fontSize: 15,
-    textAlign: 'left',
-    margin: 10,
-    color: '#fff'
-  },
-  separator_style: {
-   flex: 1,
-   height: StyleSheet.hairlineWidth,
-   backgroundColor: '#fff',
-  },
-  input: {
-    height: 40,
-    flex: 1,
-    paddingHorizontal: 8,
-    fontSize: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 2,
-  },
-  loginText: {
-    justifyContent: 'flex-start'
-},
 signupText: {
     paddingHorizontal: 10,
     justifyContent: 'flex-start',
