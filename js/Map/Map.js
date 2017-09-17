@@ -13,8 +13,6 @@ import
   ActivityIndicator
 } from 'react-native';
 
-import MapView, {MAP_TYPES} from 'react-native-maps';
-
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
@@ -147,16 +145,6 @@ export default class Map extends Component {
             <Text style={styles.title}>Current position: 
             {JSON.stringify(this.state.coordinate)}
             </Text>
-          <MapView.Animated
-          ref={"map"}
-          style={styles.map}
-          region={this.state.region}
-          onRegionChange={region => this.onRegionChange(region)}
-        >
-        <MapView.Marker.Animated
-              coordinate={this.state.coordinate}
-            />
-        </MapView.Animated>
         </View>
       );
     }
