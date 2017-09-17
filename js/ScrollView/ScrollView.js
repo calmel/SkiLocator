@@ -8,7 +8,6 @@ import React, { Component } from 'react';
 import {
   Alert,
   StyleSheet,
-  Text,
   TextInput,
   View,
   ListView,
@@ -16,18 +15,9 @@ import {
   TouchableOpacity,
   AsyncStorage,
 } from 'react-native';
-import Swipeout from 'react-native-swipeout';
+import {Button, Icon, Text} from 'react-native-elements'
 import Emoji  from 'react-native-emoji';
 
-
-  const ds = new ListView.DataSource({
-    rowHasChanged: (r1, r2) => r1 !== r2,
-    sectionHeaderHasChanged: (s1, s2) => s1 !== s2
-  });
-
-
-
-  const ACCESS_TOKEN = 'access_token';
 
 export default class SampleMenu extends Component {
   constructor(props) {
@@ -40,35 +30,13 @@ export default class SampleMenu extends Component {
       //dataSource: ds.cloneWithRowsAndSections(data_array),
       //filter_string:'',
       happiness:0,
-      text:""
+      text:"",
+      submitted: false
     };
   }
   componentWillMount() {
-    this.getToken();
   }
-  getToken = async () => 
-    {
-        try 
-        {
-            let accessToken = await AsyncStorage.getItem(ACCESS_TOKEN);
-            if(!accessToken) 
-            {
-                console.log("Token not set");
-            } 
-            else 
-            {
-                //this.verifyToken(accessToken)
-                console.log("getting token from storage");
-                console.log(accessToken);
-                return(accessToken);
-            }
-        } 
-        catch(error) 
-        {
-            console.log("Something went wrong");
-        }
-    } 
-  
+
   pressOne = () => {
     this.setState({happiness:1});
   }
@@ -109,64 +77,10 @@ export default class SampleMenu extends Component {
   }
 
   submit = () => {
-    setTimeout(()=>this.alert(), 3000);
-  }
-
-  deleteRow(rowId)
-  {
-    let index = data_array.indexOf(rowId);
-    if(index>-1)
-    {
-      data_array.splice(index, 1);
-    }
-    this.setState({dataSource:ds.cloneWithRows(data_array)});
-  }
-  _handleSwipeout(sectionID, rowID) {
-  for (var i = 0; i < data_array.length; i++) 
-  {
-    if (i != rowID) data_array[i].active = false
-    else data_array[i].active = true
-  }
-  this._updateDataSource(data_array)
-  }
-  _updateDataSource(data) 
-  {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(data)
-  })
-  }
-  _renderRow(rowData,sectionId,rowId)
-  {
-      let swipeBtns = [{
-      text: 'Delete',
-      backgroundColor: 'red',
-      onPress: () => { this.deleteRow(rowData) }
-    }];
-    return(
-      <Swipeout right={swipeBtns}
-                autoClose='true'
-                backgroundColor= 'transparent'>
-              <TouchableHighlight 
-              onPress={() => {
-                if(data_array[rowId] == "Me")
-                {
-                  //render map of self location
-                  this.props.navigator.push({index: 1});
-                }
-                  /* this is sample to show alert when you click on item
-                  Alert.alert(
-                    'Enter title here..',
-                    'You click on '+rowData,
-                  );
-                  */
-              }}>
-                <View style={styles.row}>
-                  <Text style={styles.row_style}>{rowData}</Text>
-                </View>
-              </TouchableHighlight>
-            </Swipeout>
-    );
-
+    if(!this.state.submitted){
+      this.setState({submitted: true})
+      setTimeout(()=>this.alert(), 3000);
+      }
   }
   render() {
 
@@ -202,19 +116,27 @@ export default class SampleMenu extends Component {
         </TouchableOpacity>
         </View>
         <View style={styles.Container3}>
-          <TextInput
-          style={{height: 120, borderColor: 'white', borderWidth: 1, color: '#fff',paddingHorizontal:10}}
-          onChangeText={(text) => this.setState({text})}
-          multiline={true}
-          placeholder="Please enter your message here :)"
-          placeholderTextColor="white"
-          value={this.state.text}/>
+        <TextInput
+        underlineColorAndroid='transparent'
+        style={{color: '#9d9d9d', marginTop: 5, fontSize: 18, backgroundColor: "#e6e7ea", height:200}}
+        onChangeText={(text) => this.setState({text})}
+        multiline={true}
+        placeholder="Enter your message here"
+        placeholderTextColor="#9d9d9d"
+        value={this.state.text}/>
         </View>
         <View style={styles.Container4}>
-          <TouchableOpacity style={styles.buttonSubmit}
-            onPress={this.submit.bind(this)}>
-          <Text style={styles.submit}>Submit</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+        onPress={this.submit.bind(this)}>
+          <Button
+          borderRadius={5}
+          large={true}
+          fontWeight="bold"
+          fontSize={20}
+          backgroundColor="#377df6"
+          title="Submit"
+          />
+      </TouchableOpacity>
         </View>
 
       </View>
@@ -225,37 +147,35 @@ export default class SampleMenu extends Component {
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: '#34495e',
+    backgroundColor: '#FFFFFF',
     flexDirection: 'column'
   },
   Container2: {
-    flex: 0.5,
-    backgroundColor: '#34495e',
+    flex: 1,
+    backgroundColor: '#FFFFFF',
     flexDirection: 'row'
   },
   Container3: {
-    flex: 1,
-    backgroundColor: '#34495e',
+    flex: 2,
     flexDirection: 'column',
     paddingHorizontal: 15,
   },
   title: {
-    flex: 0.1,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    flexGrow:1,
+    flexGrow: 1,
     justifyContent: 'center'
   },
   Container4: {
-    flex: 0.5,
-    backgroundColor: '#34495e',
-    flexDirection: 'row',
-    justifyContent:'flex-end'
+    marginTop: 10,
+    flex: 1,
+    backgroundColor: '#FFFFFF',
   },
 signupText: {
     paddingHorizontal: 10,
     justifyContent: 'flex-start',
-    fontSize: 40,
+    fontSize: 35,
 },
 emoji: {
     flex: 1,
@@ -268,8 +188,7 @@ buttonSubmit: {
   justifyContent: 'flex-end',
 },
 submit: {
-  color: 'white',
-  paddingHorizontal: 10,
+  color: 'black',
   justifyContent: 'flex-end',
 }
 });
