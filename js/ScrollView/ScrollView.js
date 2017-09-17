@@ -177,7 +177,7 @@ export default class beEncouraged extends Component {
 }
 const styles = StyleSheet.create({
   ContainerHeader: {
-    flex: 0.7,
+    flex: 1,
     marginTop: 20
 
   },

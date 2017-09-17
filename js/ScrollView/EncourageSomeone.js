@@ -43,11 +43,9 @@ Navigator.prototype.replaceWithAnimation = function (route) {
   });
 };
     const messages = [
-  "Hello1",
-  "Hello2",
-  "Hello3",
-  "Hello4",
-  "Hello5"
+  "I just had a miscarriage. I feel so miserable. It was my first one too....",
+  "My words are never heard. I have no one to talk to. My friends are always hanging out without me.",
+  "Think I got food poisoning yesterday night, and my bowels are just on a roll. It wont stop coming out!"
   ];
 
 export default class EncourageSomeone extends Component {
@@ -63,6 +61,7 @@ export default class EncourageSomeone extends Component {
       happiness:0,
       text:"",
       submitted: false,
+      randomInt: Math.floor(Math.random() * (3))
     };
   }
   componentWillMount() {
@@ -106,9 +105,6 @@ export default class EncourageSomeone extends Component {
       setTimeout(()=>this.alert(), 200);
     }
   }
-  getRandomInt() {
-    return Math.floor(Math.random() * (4 - 0 + 1));
-  }
   render() {
     return (
       <View style={styles.Container}>
@@ -123,7 +119,7 @@ export default class EncourageSomeone extends Component {
       <Text style={styles.header}>This person needs your help</Text>
       </View>
        <View style={styles.Container2}>
-        <Text style={styles.sadMessage}>{messages[this.getRandomInt()]}</Text>
+        <Text style={styles.sadMessage}>{messages[this.state.randomInt]}</Text>
       </View>
         <View style={styles.Container3}>
         <TextInput

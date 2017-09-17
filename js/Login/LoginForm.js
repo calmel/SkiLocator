@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
         marginBottom: 50
     },
     buttonBar: {
+        flex: 2,
         marginTop: 30
     },
     mainText: {
