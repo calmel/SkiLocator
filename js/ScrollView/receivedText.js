@@ -85,25 +85,14 @@ export default class Receiving extends Component {
   }
 
   alert = () => {
-    Alert.alert(
-      'Message Received',
-      'My Alert Msg',
-      [
-        {text: 'OK', onPress: () => this.props.navigator.replaceWithAnimation({
-          index: 0
-      })},
-      ],
-      { cancelable: false }
-    );
-    
+    this.props.navigator.replaceWithAnimation({
+      index: 0
+    });
 
   }
 
   submit = () => {
-    if(!this.state.submitted){
-      this.setState({submitted: true})
-      this.alert()
-      }
+      this.alert();
   }
   render() {
 
@@ -126,8 +115,6 @@ export default class Receiving extends Component {
         value={this.state.text}/>
         </View>
         <View style={styles.Container4}>
-        <TouchableOpacity
-        onPress={this.submit.bind(this)}>
           <Button
           borderRadius={5}
           large={true}
@@ -135,8 +122,8 @@ export default class Receiving extends Component {
           fontSize={20}
           backgroundColor="#377df6"
           title="OK"
+          onPress={this.submit.bind(this)}
           />
-      </TouchableOpacity>
         </View>
 
       </View>
