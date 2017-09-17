@@ -31,13 +31,13 @@ export default class LoginForm extends Component {
     }
 
     SubmitLogin = () => {
-        this.props.navigator.replaceWithAnimation({
+        this.props.navigator.push({
             index: 2
         });
     }
 
    SubmitSignUp = () => {
-        this.props.navigator.replaceWithAnimation({
+        this.props.navigator.push({
         index: 2
         });
     }

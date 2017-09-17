@@ -13,180 +13,19 @@ import {
   View,
   ListView,
   TouchableHighlight,
+  TouchableOpacity,
   AsyncStorage,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout'
 
-  //use this data for simple listview
-  const data_array=[
-'Me',
-'Allison',
-'Arthur',
-'Ana',
-'Alex',
-'Arlene',
-'Alberto',
-'Barry',
-'Bertha',
-'Bill',
-'Bonnie',
-'Bret',
-'Beryl',
-'Chantal',
-'Cristobal',
-'Claudette',
-'Charley',
-'Cindy',
-'Chris',
-'Dean',
-'Dolly',
-'Danny',
-'Danielle',
-'Dennis',
-'Debby',
-'Erin',
-'Edouard',
-'Erika',
-'Earl',
-'Emily',
-'Ernesto',
-'Felix',
-'Fay',
-'Fabian',
-'Frances',
-'Franklin',
-'Florence',
-'Gabielle',
-'Gustav',
-'Grace',
-'Gaston',
-'Gert',
-'Gordon',
-'Humberto',
-'Hanna',
-'Henri',
-'Hermine',
-'Harvey',
-'Helene',
-'Iris',
-'Isidore',
-'Isabel',
-'Ivan',
-'Irene',
-'Isaac',
-'Jerry',
-'Josephine',
-'Juan',
-'Jeanne',
-'Jose',
-'Joyce',
-'Karen',
-'Kyle',
-'Kate',
-'Karl',
-'Katrina',
-'Kirk',
-'Lorenzo',
-'Lili',
-'Larry',
-'Lisa',
-'Lee',
-'Leslie',
-'Michelle',
-'Marco',
-'Mindy',
-'Maria',
-'Michael',
-'Noel',
-'Nana',
-'Nicholas',
-'Nicole',
-'Nate',
-'Nadine',
-'Olga',
-'Omar',
-'Odette',
-'Otto',
-'Ophelia',
-'Oscar',
-'Pablo',
-'Paloma',
-'Peter',
-'Paula',
-'Philippe',
-'Patty',
-'Rebekah',
-'Rene',
-'Rose',
-'Richard',
-'Rita',
-'Rafael',
-'Sebastien',
-'Sally',
-'Sam',
-'Shary',
-'Stan',
-'Sandy',
-'Tanya',
-'Teddy',
-'Teresa',
-'Tomas',
-'Tammy',
-'Tony',
-'Van',
-'Vicky',
-'Victor',
-'Virginie',
-'Vince',
-'Valerie',
-'Wendy',
-'Wilfred',
-'Wanda',
-'Walter',
-'Wilma',
-'William',
-'Kumiko',
-'Aki',
-'Miharu',
-'Chiaki',
-'Michiyo',
-'Itoe',
-'Nanaho',
-'Reina',
-'Emi',
-'Yumi',
-'Ayumi',
-'Kaori',
-'Sayuri',
-'Rie',
-'Miyuki',
-'Hitomi',
-'Naoko',
-'Miwa',
-'Etsuko',
-'Akane',
-'Kazuko',
-'Miyako',
-'Youko',
-'Sachiko',
-'Mieko',
-'Toshie',
-'Junko'];
 
-
-  // // use this data for listview with sectionHeader
-  // const data_array=[];
-  // data_array['Sport']=['Soccer','Moto GP','Others'];
-  // data_array['IT & Technology']=['IT','Technology','Science'];
-  // data_array['Entertainment']=['Music','Movie','Art'];
-  // data_array['Interest']=['Travel','Style','Fashion','Business'];
-  // data_array['News & Info']=['Politics','World','Phenomenon'];
-  // data_array['Health']=['Health','Food','Lifestyle'];
 
   const ds = new ListView.DataSource({
     rowHasChanged: (r1, r2) => r1 !== r2,
     sectionHeaderHasChanged: (s1, s2) => s1 !== s2
   });
+
+
 
   const ACCESS_TOKEN = 'access_token';
 
@@ -196,10 +35,12 @@ export default class SampleMenu extends Component {
     //definition of listview datasource
     this.state = {
       //this code use for simple list view
-      dataSource: ds.cloneWithRows(data_array),
+      //dataSource: ds.cloneWithRows(data_array),
       //this code use for listview with sectionHeader
       //dataSource: ds.cloneWithRowsAndSections(data_array),
-      filter_string:'',
+      //filter_string:'',
+      happiness:0,
+      text:""
     };
   }
   componentWillMount() {
@@ -227,6 +68,96 @@ export default class SampleMenu extends Component {
             console.log("Something went wrong");
         }
     } 
+  
+  pressOne = () => {
+    this.setState({happiness:1});
+  }
+
+  pressTwo = () => {
+    this.setState({happiness:2});
+  }
+
+  pressThree = () => {
+    this.setState({happiness:3});
+  }
+
+  pressFour = () => {
+    this.setState({happiness:4});
+  }
+
+  pressFive = () => {
+    this.setState({happiness:5});
+  }
+
+  submit = () => {
+    let PushNotification = require('react-native-push-notification');
+    
+    PushNotification.configure({
+    
+        // (optional) Called when Token is generated (iOS and Android)
+        onRegister: function(token) {
+            console.log( 'TOKEN:', token );
+        },
+    
+        // (required) Called when a remote or local notification is opened or received
+        onNotification: function(notification) {
+            console.log( 'NOTIFICATION:', notification );
+        },
+    
+        // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
+        senderID: "YOUR GCM SENDER ID",
+    
+        // IOS ONLY (optional): default: all - Permissions to register.
+        permissions: {
+            alert: true,
+            badge: true,
+            sound: true
+        },
+    
+        // Should the initial notification be popped automatically
+        // default: true
+        popInitialNotification: true,
+    
+        /**
+          * (optional) default: true
+          * - Specified if permissions (ios) and token (android and ios) will requested or not,
+          * - if not, you must call PushNotificationsHandler.requestPermissions() later
+          */
+        requestPermissions: true,
+    });
+
+    PushNotification.localNotification({
+      /* Android Only Properties */
+      id: '0', // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID
+      ticker: "My Notification Ticker", // (optional)
+      autoCancel: true, // (optional) default: true
+      largeIcon: "ic_launcher", // (optional) default: "ic_launcher"
+      smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher"
+      bigText: "My big text that will be shown when notification is expanded", // (optional) default: "message" prop
+      subText: "This is a subText", // (optional) default: none
+      color: "red", // (optional) default: system default
+      vibrate: true, // (optional) default: true
+      vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+      tag: 'some_tag', // (optional) add tag to message
+      group: "group", // (optional) add group to message
+      ongoing: false, // (optional) set whether this is an "ongoing" notification
+  
+      /* iOS only properties */
+      //alertAction: // (optional) default: view
+      //category: // (optional) default: null
+      //userInfo: // (optional) default: null (object containing additional notification data)
+  
+      /* iOS and Android properties */
+      title: "My Notification Title", // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
+      message: "My Notification Message", // (required)
+      playSound: false, // (optional) default: true
+      soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+      //number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+      repeatType: 'day', // (Android only) Repeating interval. Could be one of `week`, `day`, `hour`, `minute, `time`. If specified as time, it should be accompanied by one more parameter 'repeatTime` which should the number of milliseconds between each interval
+      actions: '["Yes", "No"]',  // (Android only) See the doc for notification actions to know more
+  });
+  }
+
   deleteRow(rowId)
   {
     let index = data_array.indexOf(rowId);
@@ -287,67 +218,81 @@ export default class SampleMenu extends Component {
 
     return (
       <View style={styles.Container}>
-        <ListView style={styles.listview_style}
-          dataSource={this.state.dataSource}
-          renderRow={(rowData,sectionId,rowId) => this._renderRow(rowData, sectionId, rowId)}
-          enableEmptySections={true}
-          renderSeparator={(sectionId, rowId) => <View key={sectionId+rowId} style={styles.separator_style} />}
-          renderHeader={() =>
-            <View style={styles.listview_header}>
-              <TextInput style={styles.input} placeholder="Search..."
-                onChangeText={(text) =>{
-                  var rows = [];
+        <View style={styles.buttonBar}>
+        <TouchableOpacity style={styles.buttonLogin}
+          onPress={this.pressOne.bind(this)}>
+          <Text style={styles.loginText}>1</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonSignup}
+          onPress={this.pressTwo.bind(this)}>
+          <Text style={styles.signupText}>2</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonSignup}
+          onPress={this.pressThree.bind(this)}>
+          <Text style={styles.signupText}>3</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonSignup}
+          onPress={this.pressFour.bind(this)}>
+          <Text style={styles.signupText}>4</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonSignup}
+          onPress={this.pressFive.bind(this)}>
+          <Text style={styles.signupText}>5</Text>
+        </TouchableOpacity>
+        </View>
+        <View style={styles.Container2}>
+          <Text style={styles.loginText}>{this.state.happiness}</Text>
+        </View>
+        <View style={styles.Container3}>
+          <TextInput
+          style={{height: 120, borderColor: 'white', borderWidth: 1, color: '#fff',paddingHorizontal:10}}
+          onChangeText={(text) => this.setState({text})}
+          multiline={true}
+          placeholder="Please enter your message here :)"
+          placeholderTextColor="white"
+          value={this.state.text}/>
+        </View>
+        <View style={styles.Container4}>
+          <TouchableOpacity style={styles.buttonSignup}
+            onPress={this.submit.bind(this)}>
+          <Text style={styles.signupText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
 
-                  
-                  //this code use for simple list view
-                  for (var i=0; i < data_array.length; i++) {
-                     var stateName = data_array[i].toLowerCase();
-                     if(stateName.search(text.toLowerCase()) !== -1){
-                       rows.push(data_array[i]);
-                     }
-                   }
-                   
-
-                   //this code use for listview with sectionHeader
-                  //  for (var key in data_array) {
-                  //    if (!rows[key]) {
-                  //      rows[key] = [];
-                  //    }
-
-                  //    for (var i=0; i < data_array[key].length; i++) {
-                  //       var stateName = data_array[key][i].toLowerCase();
-                  //       if(stateName.search(text.toLowerCase()) !== -1){
-                  //         rows[key].push(data_array[key][i]);
-                  //       }
-                  //     }
-
-                  //     if(rows[key].length==0)
-                  //       delete rows[key];
-                  //  }
-
-                   //this code use for simple list view
-                   this.setState({dataSource:ds.cloneWithRows(rows)});
-                   //this code use for listview with sectionHeader
-                   //this.setState({dataSource:ds.cloneWithRowsAndSections(rows)});
-                }}
-              />
-            </View>
-          }
-          //
-          // renderSectionHeader={(rowData,sectionId)=>
-          //   <View style={styles.sectionHeader}>
-          //     <Text style={styles.sectionHeaderText}>{sectionId}</Text>
-          //   </View>
-          //}
-        />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  Container: {
     flex: 1,
+    backgroundColor: '#34495e',
+    flexDirection: 'column'
+  },
+  Container2: {
+    flex: 1,
+    backgroundColor: '#34495e',
+    flexDirection: 'column'
+  },
+  Container3: {
+    flex: 1.5,
+    backgroundColor: '#34495e',
+    flexDirection: 'column',
+    paddingHorizontal: 15,
+  },
+  Container4: {
+    flex: 0.5,
+    backgroundColor: '#34495e',
+    flexDirection: 'row',
+    justifyContent:'flex-end'
+  },
+  buttonBar: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexGrow:1,
+    justifyContent: 'center'
   },
   sectionHeader: {
     backgroundColor: '#48D1CC'
@@ -393,4 +338,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 2,
   },
+  loginText: {
+    color: '#fff',
+    fontWeight: '700',
+    paddingHorizontal: 30,
+    justifyContent: 'flex-start'
+},
+signupText: {
+    color: '#fff',
+    fontWeight: '700',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 30,
+},
 });
