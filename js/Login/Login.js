@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image, Text, KeyboardAvoidingView} from 'react-native';
+import {StyleSheet, View, Image, Text, KeyboardAvoidingView, Button} from 'react-native';
 
 import LoginForm from './LoginForm';
 
@@ -9,11 +9,6 @@ export default class Login extends Component
     {
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                <View style={styles.logoContainer}>
-                <Image style={styles.logo} 
-                source={require('./img/snowboard.png')}/>
-                <Text style={styles.title}>Experimental App</Text>
-                </View>
                 <View style={styles.formContainer}>
                 <LoginForm navigator={this.props.navigator}/>
                 </View>
@@ -25,7 +20,7 @@ export default class Login extends Component
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor: '#34495e',
+        backgroundColor: '#00b764',
         flexDirection: 'column',
     },
     logoContainer:{
