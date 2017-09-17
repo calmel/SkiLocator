@@ -58,6 +58,11 @@ export default class Receiving extends Component {
     };
   }
 
+  submit = () => {
+    this.props.navigator.replaceWithAnimation({
+      index: 0
+    });
+  }
 
   render() {
 
@@ -80,6 +85,17 @@ export default class Receiving extends Component {
         Keep up that confidence you got in you and stay awesome! Hope 
         you have a great day!
         </Text>
+        <View style={styles.Container4}>
+          <Button
+          borderRadius={5}
+          large={true}
+          fontWeight="bold"
+          fontSize={20}
+          backgroundColor="#377df6"
+          title="Home"
+          onPress={this.submit.bind(this)}
+          />
+        </View>
       </View>
     );
   }
@@ -99,6 +115,12 @@ const styles = StyleSheet.create({
     color: "black",
     marginLeft: 40,
     fontSize: 21,
+  },
+  Container4: {
+    marginTop: 10,
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'flex-end'
   },
 
 });
