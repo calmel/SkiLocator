@@ -86,8 +86,19 @@ export default class SampleMenu extends Component {
 
     return (
       <View style={styles.Container}>
+      <View style={styles.ContainerHeader}>
+        <Icon
+        size={32}
+        name='chat'
+        color='#00b764'
+        containerStyle={{position: "absolute", left:5}}
+      />
+      <Text style={styles.header}>Get an encouraging message</Text>
+
+      <Text style={styles.submit}>Please choose the Emoji that best describes your mental state:</Text>
+      </View>
         <View style={styles.title}>
-        <Text style={styles.submit}>Please choose the Emoji that best describes your mental state:</Text>
+        
           </View>
         <View style={styles.Container2}>
         <TouchableOpacity style={styles.emoji}
@@ -121,7 +132,7 @@ export default class SampleMenu extends Component {
         style={{color: '#9d9d9d', marginTop: 5, fontSize: 18, backgroundColor: "#e6e7ea", height:200}}
         onChangeText={(text) => this.setState({text})}
         multiline={true}
-        placeholder="Enter your message here"
+        placeholder="How are you feeling? Describe your situation"
         placeholderTextColor="#9d9d9d"
         value={this.state.text}/>
         </View>
@@ -144,6 +155,16 @@ export default class SampleMenu extends Component {
   }
 }
 const styles = StyleSheet.create({
+  ContainerHeader: {
+    flex: 0.7,
+
+  },
+  header: {
+    color: "black",
+    marginLeft: 40,
+    fontSize: 21,
+
+  },
   Container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -152,19 +173,14 @@ const styles = StyleSheet.create({
   Container2: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    flexDirection: 'row'
+    flexDirection: 'row',
+
   },
   Container3: {
     flex: 2,
     flexDirection: 'column',
-    paddingHorizontal: 5
-  },
-  title: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexGrow: 1,
-    justifyContent: 'center'
+    paddingHorizontal: 5,
+
   },
   Container4: {
     marginTop: 10,
@@ -187,6 +203,9 @@ buttonSubmit: {
   justifyContent: 'flex-end',
 },
 submit: {
+  marginTop: 20,
+  marginLeft: 5,
+  fontSize: 18,
   color: 'black',
   justifyContent: 'flex-end',
 }

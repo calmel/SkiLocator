@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
   header: {
     color: "black",
     marginLeft: 40,
+    fontSize: 21
   },
   sadMessage: {
     margin: 10,
